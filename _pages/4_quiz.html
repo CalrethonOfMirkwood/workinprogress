@@ -1,0 +1,144 @@
+---
+layout: default
+permalink: /quiz/
+title: Kpop Compatibility Quiz
+---
+<h2>Take this amazing personality quiz to determine which kpop idol you are most compatible with.</h2>
+
+<br>
+
+<script>
+var questionArray = [
+  ["Q1. Is the glass half empty or half full?", "Half empty", "Half full", "Reality is not objective"], 
+  ["Q2. Which primary color is your favorite?", "Red", "Green", "Blue"], 
+  ["Q3. ???", "What?", "What??", "???"]
+];
+
+//populate document
+for (var i = 0; i < questionArray.length; i++){
+  document.write("<form><span class='question'>" + questionArray[i][0] + "  </span><br>");
+  for (var x = 1; x < 4; x++){
+    document.write("<input type='radio' class='answer' name='answer' value='" + questionArray[i][x] + "'>" + questionArray[i][x] + "");
+    document.write("<br>")
+  }
+  document.write("</form><br>");
+}
+
+var characterAnswer = [
+  [0, 0, 0, 'Jungkook'],
+  [0, 0, 1, 'Kookjung.  Impressive.'],
+  [0, 0, 2, 'Jungkuk'],
+  [0, 0, 3, 'whoever you want it to be, idk and idc'],
+  [0, 1, 0, 'big big chungus big big chungus'],
+  [0, 1, 1, 'amogus'],
+  [0, 1, 2, 'Huge Kenzer'],
+  [0, 1, 3, 'Big Floppa'],
+  [0, 2, 0, 'J-Hope'],
+  [0, 2, 1, '[yknow I just realized that I put "half empty" even when "half full" usually comes first, that really says something huh.]'],
+  [0, 2, 2, '[I\'m running out of ideas]'],
+  [0, 2, 3, 'Big Floppa'],
+  [0, 3, 0, 'RM'],
+  [0, 3, 1, '[school appropriate joke]'],
+  [0, 3, 2, 'your mom'],
+  [0, 3, 3, 'your cat'],
+  [1, 0, 0, 'nekoarc'],
+  [1, 0, 1, 'Jungkook\'s evil twin'],
+  [1, 0, 2, 'Jungkook\'s good twin'],
+  [1, 0, 3, 'Jungkook\s morally ambiguous twin'],
+  [1, 1, 0, 'Jungkook.  Who else were you expecting?'],
+  [1, 1, 1, 'Juncok.  ???'],
+  [1, 1, 2, '*insert another variation of "Jungkook"*'],
+  [1, 1, 3, 'your waifu'],
+  [1, 2, 0, 'your husbando'],
+  [1, 2, 1, 'shipgirl'],
+  [1, 2, 2, 'Gregor Samsa, a monstrous vermin.'],
+  [1, 2, 3, 'Griffith'],
+  [1, 3, 0, 'Brando Sando'],
+  [1, 3, 1, 'a DnD player'],
+  [1, 3, 2, 'Kim Jung-Un (don\'t worry this isn\'t racist, a Korean made this)'],
+  [1, 3, 3, 'Sans Undertale'],
+  [2, 0, 0, 'Legoshi'],
+  [2, 0, 1, 'Strahd'],
+  [2, 0, 2, 'Komaeda'],
+  [2, 0, 3, 'Jammin\''],
+  [2, 1, 0, 'Gwar Gura'],
+  [2, 1, 1, 'Obama'],
+  [2, 1, 2, 'IU'],
+  [2, 1, 3, 'Kanye West'],
+  [2, 2, 0, 'RMS'],
+  [2, 2, 1, 'Sarnt'],
+  [2, 2, 2, '[unfunny]'],
+  [2, 2, 3, 'Bombur'],
+  [2, 3, 0, 'gangnam style'],
+  [2, 3, 1, 'BTS meal'],
+  [2, 3, 2, '[school appropriate joke]'],
+  [2, 3, 3, 'the most hygenic Bearserk fan'],
+  [3, 0, 0, 'Suga'],
+  [3, 0, 1, 'Japanese Prime Minister Yoshihide Suga'],
+  [3, 0, 2, 'Jin'],
+  [3, 0, 3, 'V'],
+  [3, 1, 0, 'LTG'],
+  [3, 1, 1, 'John Lennon'],
+  [3, 1, 2, 'Mishima'],
+  [3, 1, 3, 'mafumafu'],
+  [3, 2, 0, 'Jimin'],
+  [3, 2, 1, 'vaush'],
+  [3, 2, 2, 'Bill Gates'],
+  [3, 2, 3, 'the next Korean man you see walking down the street alone at night.'],
+  [3, 3, 0, 'Jimin'],
+  [3, 3, 1, 'Mortensen, Viggo'],
+  [3, 3, 2, 'Bill Gates'],
+  [3, 3, 3, 'nobody.  You\'re forever alone.']
+];
+
+//check for click
+var inputs = document.getElementsByTagName('input');
+for(var i = 0; i < inputs.length; i++){
+  inputs[i].addEventListener('click', check);
+}
+
+var userAnswers = [];
+
+//check questions answers
+function check(){
+  userAnswers = [];
+  var c = 0;
+  for(var i = 0; i < inputs.length; i++){
+    if(inputs[i].checked) {
+      userAnswers.push(i%3);
+      c++;
+    }
+  }
+  if(c==questionArray.length) rate();
+}
+
+//rate the answers per char
+function rate(){
+  console.log(userAnswers);
+  for(var i = 0; i < userAnswers.length; i++){
+    for(var j = 0; j < characterAnswer.length; j++){
+      characterAnswer[j][4] = 0;
+      for(var x = 0; x < 4; x++){
+        if(userAnswers[i] == characterAnswer[j][x])
+          characterAnswer[j][4]++;
+      }
+    }
+  }
+  answer();
+}
+
+function answer(){
+  var a = 0, t;
+  for(var j = 0; j < characterAnswer.length; j++){
+        if(characterAnswer[j][4] > a) {
+        a = characterAnswer[j][4];
+        t = characterAnswer[j][3];
+        }
+} 
+  document.getElementById("text").innerText = "You are most compatible with " + t + "";
+}
+</script>
+
+<br>
+
+<h2 id="text"></div>
