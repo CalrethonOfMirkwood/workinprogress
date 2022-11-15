@@ -1,0 +1,132 @@
+---
+permalink: /lastfm
+layout: default
+title: Lastfm
+search_exclude: false
+---
+<body>
+<div class="input">
+    <p>Enter your lastfm username</p>
+    <input type="text" id="username" placeholder="Username">
+    <button id="submit">Submit</button>
+</div>
+
+<div class="info">
+    <!-- make name a hyperlink-->
+    <p id="name"></p>
+    <p id="plays"></p>
+</div>
+
+<div class="infos">
+<div class="recent">
+    <p id = "recentText">Most recent track</p>
+    <img id = "recentImg">
+    <p id = "recentName"></p>
+</div>
+<div class="topAlbum">
+    <p id = "topAlbumText">Top album of all time</p>
+    <img id = "topAlbumImg">
+    <p id = "topAlbumName"></p>
+</div>
+<div class="topArtist">
+    <p id = "topArtistText">Top artist of all time</p>
+    <img id = "topArtistImg">
+    <p id = "topArtistName"></p>
+</div>
+<script>
+    const submit = document.getElementById("submit");
+    submit.addEventListener("click", function() {
+        const username = document.getElementById("username").value;
+        const name = document.getElementById("name");
+        const plays = document.getElementById("plays");
+        if(username == "") return alert("Please enter a username");
+        fetch(`http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user=${username}&api_key=79a081f37a32dd37c4fcb337d085cfaf&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            if(!data.user) return alert ("User not found");
+            name.innerHTML = `<a href="https://www.last.fm/user/${username}">${data.user.realname}</a>`;
+            plays.innerHTML = `Total plays: ${data.user.playcount}`;
+        });
+        const recent = document.querySelector(".recent");
+        fetch(`http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${username}&api_key=79a081f37a32dd37c4fcb337d085cfaf&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            if(!data.recenttracks) return alert ("User not found");
+            recent.style.display = "flex";
+            const recentImg = document.getElementById("recentImg");
+            recentImg.src = data.recenttracks.track[0].image[3]["#text"];
+            const recentName = document.getElementById("recentName");
+            recentName.innerHTML = `${data.recenttracks.track[0].name}`;
+        });
+        fetch(`http://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=${username}&api_key=79a081f37a32dd37c4fcb337d085cfaf&limit=1&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            if(!data.topalbums) return alert ("User not found");
+            const topAlbum = document.querySelector(".topAlbum");
+            topAlbum.style.display = "flex";
+            const topAlbumImg = document.getElementById("topAlbumImg");
+            topAlbumImg.src = data.topalbums.album[0].image[3]["#text"];
+            const topAlbumName = document.getElementById("topAlbumName");
+            topAlbumName.innerHTML = `${data.topalbums.album[0].name}`;
+        });
+        fetch(`http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user=${username}&api_key=79a081f37a32dd37c4fcb337d085cfaf&limit=1&format=json`)
+        .then(response => response.json())
+        .then(data => {
+            if(!data.topartists) return alert ("User not found");
+            console.log(data)
+            const topArtist = document.querySelector(".topArtist");
+            topArtist.style.display = "flex";
+            const topArtistImg = document.getElementById("topArtistImg");
+            topArtistImg.src = data.topartists.artist[0].image[4]["#text"];
+            const topArtistName = document.getElementById("topArtistName");
+            topArtistName.innerHTML = `${data.topartists.artist[0].name}`;
+        });
+    });
+
+
+</script>
+
+<style>
+    .input {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+    }
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+    }
+    .recent {
+        display: none;
+        flex-direction: column;
+        margin-top: 50px;
+    }
+    .recent img {
+        width: 200px;
+        height: 200px;
+    }
+    .topAlbum {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .infos {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 50px;
+    }
+    .topArtist {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+</style>
+</body>
